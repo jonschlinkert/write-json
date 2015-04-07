@@ -1,7 +1,7 @@
 {
   "name": "write-json",
   "description": "Write a JSON to file disk, also creates directories in the dest path if they don't already exist.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "homepage": "https://github.com/jonschlinkert/write-json",
   "author": {
     "name": "Jon Schlinkert",
@@ -16,14 +16,20 @@
   },
   "license": {
     "type": "MIT",
-    "url": "https://github.com/jonschlinkert/write-json/blob/master/LICENSE-MIT"
+    "url": "https://github.com/jonschlinkert/write-json/blob/master/LICENSE"
   },
+  "files": [
+    "index.js"
+  ],
   "main": "index.js",
   "engines": {
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "mocha -R spec"
+    "test": "mocha"
+  },
+  "dependencies": {
+    "write": "^0.2.0"
   },
   "keywords": [
     "file",
@@ -35,5 +41,10 @@
     "pkg",
     "stringify",
     "write"
-  ]
+  ],
+  "devDependencies": {
+    "delete": "^0.1.5",
+    "mocha": "^2.2.1",
+    "should": "^5.2.0"
+  }
 }
