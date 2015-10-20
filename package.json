@@ -1,23 +1,14 @@
 {
   "name": "write-json",
-  "description": "Write a JSON to file disk, also creates directories in the dest path if they don't already exist.",
-  "version": "0.2.0",
+  "description": "Write a JSON file to disk, also creates intermediate directories in the destination path if they don't already exist.",
+  "version": "0.2.1",
   "homepage": "https://github.com/jonschlinkert/write-json",
-  "author": {
-    "name": "Jon Schlinkert",
-    "url": "https://github.com/jonschlinkert"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/jonschlinkert/write-json.git"
-  },
+  "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+  "repository": "jonschlinkert/write-json",
   "bugs": {
     "url": "https://github.com/jonschlinkert/write-json/issues"
   },
-  "license": {
-    "type": "MIT",
-    "url": "https://github.com/jonschlinkert/write-json/blob/master/LICENSE"
-  },
+  "license": "MIT",
   "files": [
     "index.js"
   ],
@@ -29,7 +20,7 @@
     "test": "mocha"
   },
   "dependencies": {
-    "write": "^0.2.0"
+    "write": "^0.2.1"
   },
   "keywords": [
     "file",
@@ -44,7 +35,12 @@
   ],
   "devDependencies": {
     "delete": "^0.1.5",
-    "mocha": "^2.2.1",
-    "should": "^5.2.0"
+    "mocha": "^2.2.1"
+  },
+  "verb": {
+    "related": {
+      "description": "",
+      "list": []
+    }
   }
 }
