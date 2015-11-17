@@ -22,6 +22,10 @@
   "dependencies": {
     "write": "^0.2.1"
   },
+  "devDependencies": {
+    "delete": "^0.2.1",
+    "mocha": "*"
+  },
   "keywords": [
     "file",
     "fs",
@@ -33,14 +37,17 @@
     "stringify",
     "write"
   ],
-  "devDependencies": {
-    "delete": "^0.1.5",
-    "mocha": "^2.2.1"
-  },
   "verb": {
     "related": {
-      "description": "",
-      "list": []
+      "list": [
+        "delete",
+        "write",
+        "write-yaml",
+        "read-yaml",
+        "read-json",
+        "read-data"
+      ],
+      "description": ""
     }
   }
 }
