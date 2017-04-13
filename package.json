@@ -20,11 +20,12 @@
     "test": "mocha"
   },
   "dependencies": {
-    "write": "^0.2.1"
+    "write": "^0.3.3"
   },
   "devDependencies": {
-    "delete": "^0.2.1",
-    "mocha": "*"
+    "delete": "^0.3.2",
+    "gulp-format-md": "^0.1.12",
+    "mocha": "^3.2.0"
   },
   "keywords": [
     "file",
@@ -41,13 +42,23 @@
     "related": {
       "list": [
         "delete",
-        "write",
-        "write-yaml",
-        "read-yaml",
+        "read-data",
         "read-json",
-        "read-data"
-      ],
-      "description": ""
+        "read-yaml",
+        "write",
+        "write-yaml"
+      ]
+    },
+    "toc": false,
+    "layout": "default",
+    "tasks": [
+      "readme"
+    ],
+    "plugins": [
+      "gulp-format-md"
+    ],
+    "lint": {
+      "reflinks": true
     }
   }
 }
