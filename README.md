@@ -10,6 +10,12 @@ Install with [npm](https://www.npmjs.com/):
 $ npm install --save write-json
 ```
 
+Install with [yarn](https://yarnpkg.com):
+
+```sh
+$ yarn add write-json
+```
+
 ## Usage
 
 ```js
