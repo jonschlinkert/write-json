@@ -10,12 +10,6 @@ Install with [npm](https://www.npmjs.com/):
 $ npm install --save write-json
 ```
 
-Install with [yarn](https://yarnpkg.com):
-
-```sh
-$ yarn add write-json
-```
-
 ## Usage
 
 ```js
@@ -30,31 +24,170 @@ writeJson('foo.json', {abc: 'xyz'}, function(err) {
 writeJson.sync('foo.json', {abc: 'xyz'});
 ```
 
-## JSON.stringify
+<details>
+<summary><strong>JSON.stringify</strong></summary>
 
-Supports the same arguments as [JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
+### arguments
+
+All methods support the same arguments as [JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) (note that if you want to pass a [replacer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#The_replacer_parameter) function to `writeJson` - the main export, you must pass the replacer on an [options](#options) object)
 
 ```js
 // async
 writeJson('foo.json', {abc: 'xyz'}, null, 2, function(err) {
-  // do stuff with err
+  if (err) console.log(err);
 });
 
 // sync
 writeJson.sync('foo.json', {abc: 'xyz'}, null, 2);
 ```
 
+### options
+
+Or as an options object:
+
+```js
+var options = {
+  replacer: function(key, value) {
+    // filter out properties
+    if (typeof value === 'string') {
+      return undefined;
+    }
+    return value;
+  },
+  space: 2
+};
+
+// async
+writeJson('foo.json', {abc: 'xyz'}, options, function(err) {
+  if (err) console.log(err);
+});
+
+// sync
+writeJson.sync('actual/test.json', expected, options);
+```
+
+</details>
+
+## API
+
+### [writeJson](index.js#L59)
+
+Calls `JSON.stringify` on the given `value` then asynchronously writes the result to a file, replacing the file if it already exists and creating any intermediate directories if they don't already exist. Returns a promise if a callback function is not passed.
+
+**Params**
+
+* `filepath` **{string}**: Destination file path
+* `value` **{object}**: Value to stringify.
+* `options` **{object}**: Options to pass to [JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
+* `callback` **{Function}**: (optional) If no callback is provided, a promise is returned.
+* `returns` **{undefined}**
+
+**Example**
+
+```js
+var writeJson = require('write');
+var pkg = {name: 'write-json'};
+
+writeJson('foo.json', pkg, function(err) {
+  if (err) console.log(err);
+});
+
+// pass options to JSON.stringify explicitly
+writeJson('foo.json', pkg, null, 2, function(err) {
+  if (err) console.log(err);
+});
+
+// pass options to JSON.stringify as an object
+// (since this method returns a promise if no callback is passed,
+// if you want to pass a replacer function to JSON.stringify, it
+// must be passed on an options object)
+writeJson('foo.json', pkg, {
+  space: 2,
+  replacer: function(value) {
+    // filter out properties
+    if (typeof value === 'string') {
+      return undefined;
+    }
+    return value;
+  }
+}, function(err) {
+  if (err) console.log(err);
+});
+```
+
+### [.promise](index.js#L85)
+
+The promise version of [writeFile](#writefile). Returns a promise.
+
+**Params**
+
+* `filepath` **{String}**: Destination file path
+* `value` **{any}**: The value to stringify
+* `options` **{object}**: Options to pass to [JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
+* `returns` **{Promise}**
+
+**Example**
+
+```js
+var writeJson = require('write');
+writeJson.promise('package.json', {name: 'write-json'})
+  .then(function() {
+    // do stuff
+  });
+```
+
+### [.sync](index.js#L105)
+
+The synchronous version of [writeFile](#writefile). Returns undefined.
+
+**Params**
+
+* `filepath` **{String}**: Destination file path
+* `value` **{any}**: The value to stringify
+* `options` **{object}**: Options to pass to [JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
+* `returns` **{undefined}**
+
+**Example**
+
+```js
+var writeJson = require('write');
+writeJson.sync('package.json', {name: 'write-json'});
+```
+
+### [.stream](index.js#L130)
+
+The stream version of [writeFile](#writefile). Returns a new [WriteStream](https://nodejs.org/api/fs.html#fs_class_fs_writestream) object.
+
+**Params**
+
+* `filepath` **{string|Buffer|integer}**: filepath or file descriptor.
+* `options` **{object}**: Options to pass to [mkdirp](https://github.com/substack/node-mkdirp) and [fs.createWriteStream][fs]{#fs_fs_createwritestream_path_options}
+* `returns` **{Stream}**: Returns a new [WriteStream](https://nodejs.org/api/fs.html#fs_class_fs_writestream) object. (See [Writable Stream](https://nodejs.org/api/stream.html#stream_class_stream_writable)).
+
+**Example**
+
+```js
+var fs = require('fs');
+var writeJson = require('write');
+fs.createReadStream('defaults.json')
+  .pipe(writeJson.stream('package.json'))
+  .on('close', function() {
+    // do stuff
+  });
+```
+
 ## Release history
 
 ### v2.0.0 - 2017-07-10
 
-**Added**
-
-* [promise support](#promise)
-
 **Changed**
 
 * The main function now returns a promise if no callback is passed
+
+**Added**
+
+* adds [promise support](#promise)
+* adds [stream support](#stream)
 
 ### v1.0.0 - 2017-04-12
 
@@ -68,8 +201,8 @@ writeJson.sync('foo.json', {abc: 'xyz'}, null, 2);
 
 * [delete](https://www.npmjs.com/package/delete): Delete files and folders and any intermediate directories if they exist (sync and async). | [homepage](https://github.com/jonschlinkert/delete "Delete files and folders and any intermediate directories if they exist (sync and async).")
 * [read-data](https://www.npmjs.com/package/read-data): Read JSON or YAML files. | [homepage](https://github.com/jonschlinkert/read-data "Read JSON or YAML files.")
-* [read-json](https://www.npmjs.com/package/read-json): Reads and parses a JSON file. | [homepage](https://github.com/n-johnson/read-json#readme "Reads and parses a JSON file.")
 * [read-yaml](https://www.npmjs.com/package/read-yaml): Very thin wrapper around js-yaml for directly reading in YAML files. | [homepage](https://github.com/jonschlinkert/read-yaml "Very thin wrapper around js-yaml for directly reading in YAML files.")
+* [write-data](https://www.npmjs.com/package/write-data): Write a YAML or JSON file to disk. Automatically detects the format to write based… [more](https://github.com/jonschlinkert/write-data) | [homepage](https://github.com/jonschlinkert/write-data "Write a YAML or JSON file to disk. Automatically detects the format to write based on extension. Or pass `ext` on the options.")
 * [write-yaml](https://www.npmjs.com/package/write-yaml): Write YAML. Converts JSON to YAML writes it to the specified file. | [homepage](https://github.com/jonschlinkert/write-yaml "Write YAML. Converts JSON to YAML writes it to the specified file.")
 * [write](https://www.npmjs.com/package/write): Write files to disk, creating intermediate directories if they don't exist. | [homepage](https://github.com/jonschlinkert/write "Write files to disk, creating intermediate directories if they don't exist.")
 
