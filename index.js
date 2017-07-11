@@ -12,18 +12,21 @@ var isObject = require('isobject');
 var writeFile = require('write');
 
 /**
- * Writes a JSON file to disk asynchronously, creating any intermediate
- * directories if they don't already exist.
+ * Calls `JSON.stringify` on the given `value` then asynchronously writes the
+ * result to a file, replacing the file if it already exists and creating any
+ * intermediate directories if they don't already exist. Returns a promise if
+ * a callback function is not passed.
  *
  * ```js
  * var writeJson = require('write');
- * var value = {foo: 'bar'};
- * writeJson('foo.json', value, function(err) {
+ * var pkg = {name: 'write-json'};
+ *
+ * writeJson('foo.json', pkg, function(err) {
  *   if (err) console.log(err);
  * });
  *
  * // pass options to JSON.stringify explicitly
- * writeJson('foo.json', value, null, 2, function(err) {
+ * writeJson('foo.json', pkg, null, 2, function(err) {
  *   if (err) console.log(err);
  * });
  *
@@ -31,7 +34,7 @@ var writeFile = require('write');
  * // (since this method returns a promise if no callback is passed,
  * // if you want to pass a replacer function to JSON.stringify, it
  * // must be passed on an options object)
- * writeJson('foo.json', value, {
+ * writeJson('foo.json', pkg, {
  *   space: 2,
  *   replacer: function(value) {
  *     // filter out properties
@@ -45,7 +48,7 @@ var writeFile = require('write');
  * });
  * ```
  * @name writeJson
- * @param  {string} `dest` Destination file path
+ * @param  {string} `filepath` Destination file path
  * @param  {object} `value` Value to stringify.
  * @param  {object} `options` Options to pass to [JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
  * @param  {Function} `callback` (optional) If no callback is provided, a promise is returned.
@@ -53,58 +56,80 @@ var writeFile = require('write');
  * @api public
  */
 
-function writeJson(dest, value, cb) {
+function writeJson(filepath, value, cb) {
   var args = [].slice.call(arguments, 1);
   if (typeof args[args.length - 1] === 'function') {
     cb = args.pop();
   }
-  return writeFile(dest, stringify.apply(null, args), cb);
+  return writeFile(filepath, stringify.apply(null, args), cb);
 }
 
 /**
- * Writes a JSON file, creating any intermediate directories if they
- * don't already exist, then returns a promise. This is called by the
- * [writeJson](#writeJson) when no callback is passed.
+ * The promise version of [writeFile](#writefile). Returns a promise.
  *
  * ```js
  * var writeJson = require('write');
- * writeJson.promise('foo.txt', 'This is content to write.')
+ * writeJson.promise('package.json', {name: 'write-json'})
  *   .then(function() {
  *     // do stuff
  *   });
  * ```
  * @name .promise
- * @param  {String} `dest` Destination file path
+ * @param  {String} `filepath` Destination file path
  * @param  {any} `value` The value to stringify
  * @param  {object} `options` Options to pass to [JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
  * @return {Promise}
  * @api public
  */
 
-writeJson.promise = function(dest, value) {
+writeJson.promise = function(filepath, value) {
   var args = [].slice.call(arguments, 1);
-  return writeFile.promise(dest, stringify.apply(null, args));
+  return writeFile.promise(filepath, stringify.apply(null, args));
 };
 
 /**
- * Writes a JSON file synchronously, creating any intermediate
- * directories if they don't already exist.
+ * The synchronous version of [writeFile](#writefile). Returns undefined.
  *
  * ```js
  * var writeJson = require('write');
- * writeJson.sync('foo.txt', 'This is content to write.');
+ * writeJson.sync('package.json', {name: 'write-json'});
  * ```
  * @name .sync
- * @param  {String} `dest` Destination file path
+ * @param  {String} `filepath` Destination file path
  * @param  {any} `value` The value to stringify
  * @param  {object} `options` Options to pass to [JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
  * @return {undefined}
  * @api public
  */
 
-writeJson.sync = function(dest, value) {
+writeJson.sync = function(filepath, value) {
   var args = [].slice.call(arguments, 1);
-  writeFile.sync(dest, stringify.apply(null, args));
+  writeFile.sync(filepath, stringify.apply(null, args));
+};
+
+/**
+ * The stream version of [writeFile](#writefile). Returns a new
+ * [WriteStream] object.
+ *
+ * ```js
+ * var fs = require('fs');
+ * var writeJson = require('write');
+ * fs.createReadStream('defaults.json')
+ *   .pipe(writeJson.stream('package.json'))
+ *   .on('close', function() {
+ *     // do stuff
+ *   });
+ * ```
+ * @name .stream
+ * @param {string|Buffer|integer} `filepath` filepath or file descriptor.
+ * @param {object} `options` Options to pass to [mkdirp][] and [fs.createWriteStream][fs]{#fs_fs_createwritestream_path_options}
+ * @return {Stream} Returns a new [WriteStream] object. (See [Writable Stream](https://nodejs.org/api/stream.html#stream_class_stream_writable)).
+ * @api public
+ */
+
+writeJson.stream = function(filepath, options) {
+  var args = [].slice.call(arguments, 1);
+  return writeFile.stream(filepath, stringify.apply(null, args));
 };
 
 /**

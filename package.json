@@ -14,14 +14,14 @@
   ],
   "main": "index.js",
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=4"
   },
   "scripts": {
     "test": "mocha"
   },
   "dependencies": {
     "isobject": "^3.0.1",
-    "write": "^1.0.2"
+    "write": "^1.0.3"
   },
   "devDependencies": {
     "delete": "^1.1.0",
@@ -29,14 +29,32 @@
     "mocha": "^3.4.2"
   },
   "keywords": [
+    "async",
+    "buffer",
+    "data",
     "file",
+    "file-system",
+    "filepath",
+    "files",
+    "filesystem",
+    "folder",
+    "format",
     "fs",
+    "fs.createWriteStream",
+    "fs.writeFile",
+    "fs.writeFileSync",
     "json",
+    "make-dir",
+    "make-dirp",
+    "mkdir",
+    "mkdirp",
     "object",
-    "package",
     "path",
-    "pkg",
+    "promise",
+    "read",
     "stringify",
+    "sync",
+    "Uint8Array",
     "write"
   ],
   "verb": {
@@ -52,9 +70,9 @@
       "list": [
         "delete",
         "read-data",
-        "read-json",
         "read-yaml",
         "write",
+        "write-data",
         "write-yaml"
       ]
     },

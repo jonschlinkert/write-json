@@ -2,6 +2,7 @@
 
 require('mocha');
 var fs = require('fs');
+var path = require('path');
 var assert = require('assert');
 var writeJson = require('./');
 var del = require('delete');
@@ -111,21 +112,57 @@ describe('write-json', function() {
     });
   });
 
+  describe('stream', function() {
+    it('should write a JSON file using .stream', function(cb) {
+      fs.createReadStream(path.resolve(__dirname, 'package.json'))
+        .pipe(writeJson.stream('actual/test.json'))
+        .on('close', cb);
+    });
+  });
+
   describe('sync', function() {
-    it('should write JSON syncronously', function(cb) {
+    it('should write JSON syncronously', function() {
       var expected = {foo: {bar: "baz"} };
       writeJson.sync('actual/test.json', expected);
       var res = fs.readFileSync('actual/test.json', 'utf8');
       assert.deepEqual(JSON.parse(res), expected);
-      cb();
     });
 
-    it('should pass additional args to JSON.stringify', function(cb) {
+    it('should pass additional args to JSON.stringify', function() {
       var expected = {foo: {bar: "baz"} };
       writeJson.sync('actual/test.json', expected, null, 0);
       var res = fs.readFileSync('actual/test.json', 'utf8');
       assert.deepEqual(JSON.parse(res), expected);
-      cb();
+    });
+
+    it('should take a replacer function on the args', function() {
+      var expected = {foo: {bar: "baz"} };
+      var count = 0;
+
+      writeJson.sync('actual/test.json', expected, function(key, value) {
+        count++;
+        return value;
+      }, 0);
+
+      var res = fs.readFileSync('actual/test.json', 'utf8');
+      assert.deepEqual(JSON.parse(res), expected);
+      assert(count >= 1);
+    });
+
+    it('should take a replacer function on the options', function() {
+      var expected = {foo: {bar: "baz"} };
+      var count = 0;
+
+      writeJson.sync('actual/test.json', expected, {
+        replacer: function(key, value) {
+          count++;
+          return value;
+        }
+      }, 0);
+
+      var res = fs.readFileSync('actual/test.json', 'utf8');
+      assert.deepEqual(JSON.parse(res), expected);
+      assert(count >= 1);
     });
   });
 });
