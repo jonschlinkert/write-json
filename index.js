@@ -1,13 +1,12 @@
 /*!
  * write-json <https://github.com/jonschlinkert/write-json>
  *
- * Copyright (c) 2014-2017, Jon Schlinkert.
+ * Copyright (c) 2014-2018, Jon Schlinkert.
  * Released under the MIT License.
  */
 
 'use strict';
 
-var path = require('path');
 var isObject = require('isobject');
 var writeFile = require('write');
 
@@ -146,7 +145,7 @@ function stringify(value, replacer, space) {
   if (isObject(replacer)) {
     var opts = replacer;
     replacer = opts.replacer;
-    space = opts.space;
+    space = opts.space || space;
   }
   if (space == null) {
     space = 2;
