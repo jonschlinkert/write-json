@@ -34,7 +34,7 @@ var writeFile = require('write');
  * // if you want to pass a replacer function to JSON.stringify, it
  * // must be passed on an options object)
  * writeJson('foo.json', pkg, {
- *   space: 2,
+ *   indent: 2,
  *   replacer: function(value) {
  *     // filter out properties
  *     if (typeof value === 'string') {
@@ -137,20 +137,20 @@ writeJson.stream = function(filepath, options) {
  *
  * @param {any} `value`
  * @param {Function|Object} `replacer` Function or options object
- * @param {String|Number} `space` The actual value to use for spacing, or the number of spaces to use.
+ * @param {String|Number} `indent` The actual value to use for spacing, or the number of spaces to use.
  * @return {String}
  */
 
-function stringify(value, replacer, space) {
+function stringify(value, replacer, indent) {
   if (isObject(replacer)) {
     var opts = replacer;
     replacer = opts.replacer;
-    space = opts.space || space;
+    indent = opts.indent;
   }
-  if (space == null) {
-    space = 2;
+  if (indent == null) {
+    indent = 2;
   }
-  return JSON.stringify(value, replacer, space);
+  return JSON.stringify(value, replacer, indent);
 }
 
 /**

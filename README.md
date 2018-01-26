@@ -72,7 +72,7 @@ writeJson.sync('actual/test.json', expected, options);
 
 ## API
 
-### [writeJson](index.js#L59)
+### [writeJson](index.js#L58)
 
 Calls `JSON.stringify` on the given `value` then asynchronously writes the result to a file, replacing the file if it already exists and creating any intermediate directories if they don't already exist. Returns a promise if a callback function is not passed.
 
@@ -104,7 +104,7 @@ writeJson('foo.json', pkg, null, 2, function(err) {
 // if you want to pass a replacer function to JSON.stringify, it
 // must be passed on an options object)
 writeJson('foo.json', pkg, {
-  space: 2,
+  indent: 2,
   replacer: function(value) {
     // filter out properties
     if (typeof value === 'string') {
@@ -117,7 +117,7 @@ writeJson('foo.json', pkg, {
 });
 ```
 
-### [.promise](index.js#L85)
+### [.promise](index.js#L84)
 
 The promise version of [writeFile](#writefile). Returns a promise.
 
@@ -138,7 +138,7 @@ writeJson.promise('package.json', {name: 'write-json'})
   });
 ```
 
-### [.sync](index.js#L105)
+### [.sync](index.js#L104)
 
 The synchronous version of [writeFile](#writefile). Returns undefined.
 
@@ -156,7 +156,7 @@ var writeJson = require('write');
 writeJson.sync('package.json', {name: 'write-json'});
 ```
 
-### [.stream](index.js#L130)
+### [.stream](index.js#L129)
 
 The stream version of [writeFile](#writefile). Returns a new [WriteStream](https://nodejs.org/api/fs.html#fs_class_fs_writestream) object.
 
