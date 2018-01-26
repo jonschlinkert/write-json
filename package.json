@@ -1,7 +1,7 @@
 {
   "name": "write-json",
   "description": "Write a JSON file to disk, also creates intermediate directories in the destination path if they don't already exist.",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "homepage": "https://github.com/jonschlinkert/write-json",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "repository": "jonschlinkert/write-json",
